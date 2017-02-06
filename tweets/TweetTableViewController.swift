@@ -318,18 +318,26 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
                 cell.tweetText?.text = tweet.text
                 cell.nameLabel?.text = tweet.name
                 
-//                DispatchQueue.global(qos: .default).async {
+                cell.tag = indexPath.row;
+                cell.avatarImageView.image = nil;
+                
+                DispatchQueue.global(qos: .default).async {
                 
                     let urlString = tweet.avatarUrl!
                     
                     let urlAvatar = NSURL(string: urlString)!
                     if let data = NSData(contentsOf: urlAvatar as URL) {
                         
-//                        DispatchQueue.main.async {
-                            cell.avatarImageView.image = UIImage(data: data as Data)
+                        let image = UIImage(data: data as Data)
+                        
+                        DispatchQueue.main.async {
+                            if (cell.tag == indexPath.row) {
+                                cell.avatarImageView.image = image;
+                                cell.setNeedsLayout()
+                            }
                             
-//                        }
-//                    }
+                        }
+                    }
                     
                 }
             
